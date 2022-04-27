@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Barcode4J BOM</name>
+	<groupId>net.sf.barcode4j</groupId>
+	<artifactId>barcode4j-PARENT</artifactId>
+	<packaging>pom</packaging>
+	<version>2.2.0-SNAPSHOT</version>
+	<description>Parent of the Barcode4J Project.</description>
+	<url>http://barcode4j.sourceforge.net</url>
+	<licenses>
+		<license>
+		<name>The Apache Software License, Version 2.0</name>
+		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<modules>
+		<module>Barcode4J</module>
+		<module>FOP</module>
+		<module>FOP-0.20.5</module>
+		<module>JDOM</module>
+		<module>Saxon8</module>
+		<module>Xalan</module>
+		<module>XMLGraphics-commons</module>
+		<module>Sandbox</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<thirdparty.license.target.dir>licenses</thirdparty.license.target.dir>
+        <thirdparty.license.dir>${project.directory}</thirdparty.license.dir>
+        <thirdparty.license.filename>open-source-licenses.html</thirdparty.license.filename>
+
+        <!--
+            It generates (for each maven submodule) src/license/THIRD-PARTY.properties files containing not-excluded dependencies with no license
+            (i.e. license could not be extracted automatically from dependency's pom.xml <licenses> element).
+            These files are to be manually maintained, i.e. the developer must manually fill in the license f-or each dependency
+            (after researching for the correct license online).
+        -->
+        <license.useMissingFile>true</license.useMissingFile>
+        <!-- regexp value, exclude nepatec dependencies (not available in aggregate-add-third-party, only in forked add-third-party) -->
+        <license.excludedGroups>org.krysalis.*</license.excludedGroups>
+        <!-- use user.dir, not base.dir, because it always points to the root directory (the one from which the maven command was executed) -->
+        <license.fileTemplate>${user.dir}/license.ftl</license.fileTemplate>
+        <!-- ftl template outputs in html format -->
+        <license.thirdPartyFilename>${thirdparty.license.filename}</license.thirdPartyFilename>
+        <license.outputDirectory>${thirdparty.license.dir}</license.outputDirectory>
+        <!--
+            pom.xml location calculated as ".... trunk\.\pom.xml", so basedir = "trunk\.",
+            so we must specify an explicit missingFile, to avoid crashing the AggregatorAddThirdPartyMojo.createUnsafeMapping()
+            string path calculation at line 190 -->
+        <license.missingFile>${basedir}/src/license/THIRD-PARTY.properties</license.missingFile>
+        <license.excludedScopes>test</license.excludedScopes>
+	</properties>
+	
+	<developers>
+		<developer>
+		  <id>jmaerki</id>
+		  <name>Jeremias Märki</name>
+		  <email>jmaerki@users.sourceforge.net</email>
+		</developer>
+		<developer>
+		  <id>the_webmaestro</id>
+		  <name>Web Maestro Clay Leeds</name>
+		  <email>the_webmaestro@users.sourceforge.net</email>
+		</developer>
+		<developer>
+		  <id>nicolaken</id>
+		  <name>Nicola Ken Barozzi</name>
+		  <email>nicolaken@krysalis.org</email>
+		</developer>
+		<developer>
+		  <id>buerkle</id>
+		  <name>Dietmar Bürkle</name>
+		  <email>buerkle@users.sourceforge.net</email>
+		</developer>
+		<developer>
+			<name>Lonzak</name>
+		</developer>
+	</developers>
+  
+	<dependencyManagement>
+		<!-- Declare all necessary dependecies in the parent.pom in the dependencyManagement section. This ensures, that all submodules use the same version of a dependency -->
+		<dependencies>
+			<!-- Declare the modules as dependecies that they can be referenced by other modules -->
+			<dependency>
+			    <groupId>net.sf.barcode4j</groupId>
+				<artifactId>barcode4j</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<!-- Dependencies -->
+			<dependency>
+				<groupId>org.apache.avalon.framework</groupId>
+				<artifactId>avalon-framework-impl</artifactId>
+				<version>4.3.1</version>
+			</dependency>
+    		<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>javax.servlet-api</artifactId>
+			    <version>3.1.0</version>
+			    <scope>provided</scope>
+    		</dependency>
+			<dependency>
+			    <groupId>com.google.zxing</groupId>
+			    <artifactId>core</artifactId>
+			    <version>3.4.1</version>
+			</dependency>    		
+		    <dependency>
+		      	<groupId>commons-cli</groupId>
+		      	<artifactId>commons-cli</artifactId>
+		    	<version>1.5.0</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.apache.ant</groupId>
+			    <artifactId>ant</artifactId>
+			    <version>1.10.12</version>
+		    </dependency>		    
+			<!--  Testing only -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.13.2</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<doclint>none</doclint>
+			</properties>
+		</profile>
+		<profile>
+			<id>distribution</id>
+		 	<build>
+			 	<plugins>
+			 		<plugin>
+			            <groupId>org.codehaus.mojo</groupId>
+			            <artifactId>flatten-maven-plugin</artifactId>
+			            <configuration>
+			                <pomElements>
+			                    <repositories>flatten</repositories>
+			                </pomElements>
+			            </configuration>
+			            <executions>
+			                <execution>
+			                    <id>flatten</id>
+			                    <phase>process-resources</phase>
+			                    <goals>
+			                        <goal>flatten</goal>
+			                    </goals>
+			                </execution>
+			                <execution>
+			                    <id>flatten.clean</id>
+			                    <phase>clean</phase>
+			                    <goals>
+			                        <goal>clean</goal>
+			                    </goals>
+			                </execution>
+			            </executions>
+			        </plugin>
+			 	</plugins>
+		 	</build>
+		</profile>
+		<profile>
+            <id>update_thirdparty_dependencies_report</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <properties>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!-- calculate 3rd party licenses -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>1.20</version>
+                        <executions>
+                            <execution>
+                                <id>generate-report</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>aggregate-add-third-party</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <copy file="${thirdparty.license.dir}/${thirdparty.license.filename}" todir="${thirdparty.license.target.dir}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
+
+	<!-- Common build plugin for all modules -->
+	<build>
+		<pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.9.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+				<plugin>
+        			<groupId>org.codehaus.mojo</groupId>
+        			<artifactId>build-helper-maven-plugin</artifactId>
+        			<version>3.0.0</version>
+        		</plugin>
+        		<plugin>
+        			<groupId>org.codehaus.mojo</groupId>
+		            <artifactId>flatten-maven-plugin</artifactId>
+		            <version>1.2.2</version>
+        		</plugin>
+            </plugins>
+        </pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+						  <goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-source-plugin</artifactId>
+			  <version>3.0.1</version>
+			  <executions>
+				<execution>
+				  <id>attach-sources</id>
+				  <phase>verify</phase>
+				  <goals>
+					<goal>jar-no-fork</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-javadoc-plugin</artifactId>
+			  <version>3.0.1</version>
+			  <configuration>
+			  	<quiet>true</quiet>
+			  </configuration>
+			  <executions>
+				<execution>
+				  <id>attach-javadocs</id>
+				  <goals>
+					<goal>jar</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+            <!-- calculate 3rd party licenses -->
+            <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.20</version>
+                <executions>
+        	        <execution>
+                    	<id>generate-report</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                        	<goal>aggregate-add-third-party</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                    </execution>
+                </executions>
+                </plugin>
+                <plugin>
+                	<groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                    	<execution>
+                        	<phase>generate-resources</phase>
+                            <configuration>
+                            	<target>
+                                	<copy file="${thirdparty.license.dir}/${thirdparty.license.filename}" todir="${thirdparty.license.target.dir}"/>
+                                </target>
+                            </configuration>
+                       		<goals>
+                            	<goal>run</goal>
+                            </goals>
+                            <inherited>false</inherited>
+                        </execution>
+                    </executions>
+                </plugin>
+		</plugins>
+	</build>
+
+	<scm>
+        <connection>scm:git:git@github.com:Lonzak/Barcode4j.git</connection>
+        <developerConnection>scm:git:git@github.com:Lonzak/Barcode4j.git</developerConnection>
+        <url>https://github.com/Lonzak/Barcode4j.git</url>
+    </scm>
+
+    <!-- repositories>
+        <repository>
+            <id></id>
+			<url></url>
+        </repository>
+    </repositories-->
+
+</project>
