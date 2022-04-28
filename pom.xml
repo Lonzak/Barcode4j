@@ -19,6 +19,9 @@
 
 	<modules>
 		<module>Barcode4J</module>
+		<module>ant</module>
+		<module>cli</module>
+		<module>Servlet</module>
 		<module>FOP</module>
 		<module>FOP-0.20.5</module>
 		<module>JDOM</module>
