@@ -25,3 +25,8 @@ So what are the changes?
 - removed old saxon project (use saxon8 instead)
 - moved documentation to documentation folder (decide later what to do with HP and stuff)
 - added license plugin
+- refacted CLI, Servlet and Ant into separated projects to get a real core Barcode4J
+
+# TODO for 2.3
+
+- Remove dependency to the avalon framework which has been EOL'd since 2005.
