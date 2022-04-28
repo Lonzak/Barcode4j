@@ -34,7 +34,7 @@ public class BarcodeNonRootStyleElement extends StyleElement {
      * @see StyleElement#prepareAttributes()
      */
 	@Override
-	protected void prepareAttributes() {
+	public void prepareAttributes() {
 		//nop
 	}
 

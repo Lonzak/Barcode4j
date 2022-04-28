@@ -21,16 +21,30 @@
 			<artifactId>barcode4j</artifactId>
 		</dependency>
 		
+		<!-- 
 		<dependency>
 		    <groupId>net.sourceforge.saxon</groupId>
 		    <artifactId>saxon</artifactId>
 		    <version>9.1.0.8</version>
+		</dependency-->
+		
+		<dependency>
+		    <groupId>net.sf.saxon</groupId>
+		    <artifactId>saxon</artifactId>
+		    <version>8.7</version>
 		</dependency>
 		
+		<!-- somehow not available: https://mvnrepository.com/artifact/net.sf.saxon/saxon-dom/9.1.0.8
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon-dom</artifactId>
 			<version>9.1.0.8</version>
+		</dependency-->
+		
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>saxon-dom</artifactId>
+			<version>8.7</version>
 		</dependency>
 		
 		<!-- Test -->    
