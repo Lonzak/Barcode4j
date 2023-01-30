@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>net.sf.barcode4j</groupId>
 		<artifactId>barcode4j-PARENT</artifactId>
-        <version>2.2.0</version>
+        <version>2.2.1</version>
 	</parent>
 	
 	<name>Barcode4j Commandline Interface</name>
